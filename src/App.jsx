@@ -21,51 +21,60 @@ export default function App() {
 
   // The Post Logic (Now inside App.jsx so the button can trigger it)
 const handlePostArt = () => {
-  if (!navigator.geolocation) return alert("Enable GPS");
-  
-  setLoading(true);
-  navigator.geolocation.getCurrentPosition(async (pos) => {
-    const { latitude: lat, longitude: lng } = pos.coords;
+  // 1. Immediately create the camera input (No waiting!)
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.setAttribute('capture', 'environment');
 
-    // 📍 NEW: Reverse Geocoding (Convert Lat/Lng to Address)
-    let locationName = "Unknown Location";
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-      );
-      const data = await response.json();
-      // We pick 'city' or 'town' or 'village'
-      locationName = data.address.city || data.address.town || data.address.village || data.address.suburb || "ART Spot";
-    } catch (error) {
-      console.error("Geocoding failed", error);
-    }
+  // 2. Define what happens AFTER the photo is taken
+  input.onchange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.setAttribute('capture', 'environment');
-    
-    input.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (!file) { setLoading(false); return; }
+    setLoading(true);
 
-      const fileName = `${Date.now()}-ART.jpg`;
-      const { data: uploadData } = await supabase.storage.from('art-photos').upload(fileName, file);
+    // 3. NOW get the location while the user thinks the app is just "processing"
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude: lat, longitude: lng } = pos.coords;
 
-      if (uploadData) {
-        const publicUrl = supabase.storage.from('art-photos').getPublicUrl(fileName).data.publicUrl;
+      try {
+        // Reverse Geocode (Optional, but good for your feed!)
+        const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+        const geoData = await geoRes.json();
+        const locationName = geoData.address.city || geoData.address.town || "ART Spot";
+
+        const fileName = `art-${Date.now()}.jpg`;
         
-        // 💾 Save including the new location_name
+        // Upload to Supabase
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('art-photos')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const publicUrl = supabase.storage.from('art-photos').getPublicUrl(fileName).data.publicUrl;
+
+        // Save to Database
         await supabase.from('markers').insert([
           { lat, lng, image_url: publicUrl, location_name: locationName }
         ]);
-        
-        await fetchMarkers(); 
+
+        await fetchMarkers(); // Refresh the feed/map
+        alert("ART Posted!");
+      } catch (err) {
+        alert("Error: " + err.message);
+      } finally {
+        setLoading(false);
       }
+    }, (err) => {
+      alert("Location required to post ART.");
       setLoading(false);
-    };
-    input.click();
-  }, () => setLoading(false), { enableHighAccuracy: true });
+    }, { enableHighAccuracy: true });
+  };
+
+  // 4. Trigger the camera prompt IMMEDIATELY on button click
+  input.click();
 };
 
   return (
