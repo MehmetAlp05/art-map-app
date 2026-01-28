@@ -89,10 +89,10 @@ const handlePostArt = () => {
 
       {/* 📱 Bottom Navigation Menu */}
       <div style={navStyle}>
-        <button onClick={() => setView('map')} style={view === 'map' ? activeTab : tab}>
-          📍 Map
-        </button>
 
+        <button onClick={() => setView('feed')} style={view === 'feed' ? activeTab : tab}>
+          📱 Feed
+        </button>
         {/* 📸 The Central "Post" Button */}
         <button 
           onClick={handlePostArt}
@@ -106,10 +106,10 @@ const handlePostArt = () => {
         >
           {loading ? "POSTING..." : "📸"}
         </button>
-
-        <button onClick={() => setView('feed')} style={view === 'feed' ? activeTab : tab}>
-          📱 Feed
+        <button onClick={() => setView('map')} style={view === 'map' ? activeTab : tab}>
+          📍 Map
         </button>
+        
       </div>
     </div>
   );
@@ -117,13 +117,21 @@ const handlePostArt = () => {
 
 // --- Styles ---
 const navStyle = {
-  height: '10vh',
+  position: 'fixed',
+  bottom: 0,
+  left: 0,
+  right: 0,
+  height: 'auto', // Let padding handle the height
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-around',
-  backgroundColor: '#fff',
+  backgroundColor: '#ffffff',
   borderTop: '1px solid #eee',
-  paddingBottom: 'env(safe-area-inset-bottom)' // Good for modern iPhones
+  zIndex: 2000,
+  // 📱 This is the magic line for Safari
+  paddingBottom: 'calc(env(safe-area-inset-bottom) + 10px)', 
+  paddingTop: '10px'
+
 };
 const headerStyle = {
   height: '7vh',
@@ -136,6 +144,6 @@ const headerStyle = {
   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
   
 };
-const tab = { flex: 1, border: 'none', background: 'none', color: '#888', fontSize: '12px' };
+const tab = { flex: 1, border: 'none', background: 'none', color: '#888', fontSize: '16px' };
 const activeTab = { ...tab, color: '#000', fontWeight: 'bold' };
 

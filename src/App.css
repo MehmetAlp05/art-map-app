@@ -1,0 +1,14 @@
+html, body, #root {
+  height: 100%;
+  /* Prevents the rubber-band effect in Safari */
+  overflow: hidden; 
+  position: fixed;
+  width: 100%;
+}
+
+main {
+  /* This allows only the content to scroll, not the whole page */
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

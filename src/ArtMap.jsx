@@ -2,7 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { supabase } from './supabaseClient';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
+// 1. Import the images directly so Vite bundles them
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerRetina from 'leaflet/dist/images/marker-icon-2x.png';
+
+// 2. Create a new "Default Icon" object
+const DefaultIcon = L.icon({
+    iconUrl: markerIcon,
+    iconRetinaUrl: markerRetina,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
+// 3. Force Leaflet to use this icon for all markers
+L.Marker.prototype.options.icon = DefaultIcon;
 // Component to handle moving the map to your location
 function RecenterMap({ position }) {
   const map = useMap();
