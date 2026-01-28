@@ -4,7 +4,7 @@ import ArtMap from './ArtMap';
 import ArtFeed from './ArtFeed';
 
 export default function App() {
-  const [view, setView] = useState('map');
+  const [view, setView] = useState('feed');
   const [markers, setMarkers] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -78,15 +78,17 @@ const handlePostArt = () => {
 };
 
   return (
-    <div style={{ height: "100vh", width: "100vw", display: "flex", flexDirection: "column" }}>
-      
+    <div style={{ height: "97vh", width: "97vw", display: "flex", flexDirection: "column",fontFamily: 'Helvetica, sans-serif' }}>
+      <div style={headerStyle}>
+        🏺ART Was Here🏛️
+      </div>
       {/* 🖼️ Dynamic Content View */}
       <main style={{ flex: 1, overflowY: "auto", position: "relative" }}>
         {view === 'map' ? <ArtMap markers={markers} /> : <ArtFeed markers={markers} />}
       </main>
 
       {/* 📱 Bottom Navigation Menu */}
-      <nav style={navStyle}>
+      <div style={navStyle}>
         <button onClick={() => setView('map')} style={view === 'map' ? activeTab : tab}>
           📍 Map
         </button>
@@ -96,26 +98,26 @@ const handlePostArt = () => {
           onClick={handlePostArt}
           disabled={loading}
           style={{
-            position: "absolute", bottom: "30px", left: "50%", transform: "translateX(-50%)",
-            zIndex: 1000, padding: "15px 30px", backgroundColor: "#ff4444", color: "white",
+            
+            zIndex: 1000, padding: "15px 20px", backgroundColor: "#ff4444", color: "white",
             border: "none", borderRadius: "50px", fontWeight: "bold", fontSize: "16px",
             boxShadow: "0 4px 15px rgba(0,0,0,0.3)", cursor: "pointer"
           }}
         >
-          {loading ? "POSTING..." : "📸 POST ART HERE"}
+          {loading ? "POSTING..." : "📸"}
         </button>
 
         <button onClick={() => setView('feed')} style={view === 'feed' ? activeTab : tab}>
           📱 Feed
         </button>
-      </nav>
+      </div>
     </div>
   );
 }
 
 // --- Styles ---
 const navStyle = {
-  height: '70px',
+  height: '10vh',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-around',
@@ -123,19 +125,17 @@ const navStyle = {
   borderTop: '1px solid #eee',
   paddingBottom: 'env(safe-area-inset-bottom)' // Good for modern iPhones
 };
-
+const headerStyle = {
+  height: '7vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '24px',
+  fontWeight: 'bold',
+  color: 'black',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+  
+};
 const tab = { flex: 1, border: 'none', background: 'none', color: '#888', fontSize: '12px' };
 const activeTab = { ...tab, color: '#000', fontWeight: 'bold' };
 
-const postButtonStyle = {
-  width: '55px',
-  height: '55px',
-  backgroundColor: '#ff4444',
-  color: '#fff',
-  border: 'none',
-  borderRadius: '50%',
-  fontSize: '30px',
-  marginTop: '-30px', // Lifts the button slightly above the bar
-  boxShadow: '0 4px 10px rgba(255, 68, 68, 0.4)',
-  cursor: 'pointer'
-};

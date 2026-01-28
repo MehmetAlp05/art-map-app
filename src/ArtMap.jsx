@@ -79,7 +79,7 @@ const handlePostArt = () => {
 };
 
   return (
-    <div style={{ height: "90vh", position: "relative" }}>
+    <div style={{ height: "60vh", position: "relative" }}>
       {/* 🟢 The "Post ART" Button */}
 
 
