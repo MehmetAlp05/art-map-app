@@ -7,7 +7,18 @@ export default function App() {
   const [view, setView] = useState('feed');
   const [markers, setMarkers] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [myPos, setMyPos] = useState(null); // Track user location globally 
+  // Get location once when the app starts
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setMyPos([pos.coords.latitude, pos.coords.longitude]),
+        (err) => console.log("Location access denied"),
+        { enableHighAccuracy: true }
+      );
+    }
+    fetchMarkers();
+  }, []);
   // Load posts
   const fetchMarkers = async () => {
     const { data } = await supabase
@@ -83,8 +94,12 @@ const handlePostArt = () => {
         🏺ART Was Here🏛️
       </div>
       {/* 🖼️ Dynamic Content View */}
-      <main style={{ flex: 1, overflowY: "auto", position: "relative" }}>
-        {view === 'map' ? <ArtMap markers={markers} /> : <ArtFeed markers={markers} />}
+      <main style={{ flex: 1,
+                    overflowY: "auto",
+                    position: "relative",
+                    marginTop: 'calc(7vh + env(safe-area-inset-top))', // Pushes content down so header doesn't cover it
+                    marginBottom: '80px',}}>
+        {view === 'map' ? <ArtMap markers={markers} userLocation={myPos} /> : <ArtFeed markers={markers} />}
       </main>
 
       {/* 📱 Bottom Navigation Menu */}
@@ -134,6 +149,10 @@ const navStyle = {
 
 };
 const headerStyle = {
+  position: 'fixed', // Pin it to the top
+  top: 0,
+  left: 0,
+  right: 0,
   height: '7vh',
   display: 'flex',
   alignItems: 'center',
@@ -141,8 +160,10 @@ const headerStyle = {
   fontSize: '24px',
   fontWeight: 'bold',
   color: 'black',
+  backgroundColor: 'white', // Ensure it has a background or it will be transparent
   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-  
+  zIndex: 3000, // Higher than the map and nav
+  paddingTop: 'env(safe-area-inset-top)', // Support for iPhone "Dynamic Island" / Notch
 };
 const tab = { flex: 1, border: 'none', background: 'none', color: '#888', fontSize: '16px' };
 const activeTab = { ...tab, color: '#000', fontWeight: 'bold' };
