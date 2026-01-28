@@ -26,6 +26,12 @@ export default function ArtMap() {
     fetchMarkers();
   }, []);
 
+const handlePostArt = () => {
+  if (!navigator.geolocation) {
+    alert("Location services are required for ART.");
+    return;
+  }
+
   setLoading(true);
 
   // 1. Get Location First
@@ -91,3 +97,4 @@ export default function ArtMap() {
       </MapContainer>
     </div>
   );
+}
