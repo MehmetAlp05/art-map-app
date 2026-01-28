@@ -91,4 +91,3 @@ export default function ArtMap() {
       </MapContainer>
     </div>
   );
-}
