@@ -100,7 +100,6 @@ const handlePostArt = () => {
                     position: "relative",
                     marginTop: 'calc(7vh + env(safe-area-inset-top))', // Pushes content down so header doesn't cover it
                     marginBottom: '80px',
-                    overflow: "hidden",
                     borderRadius: '12px'
                     }}>
         {view === 'map' ? <ArtMap markers={markers} userLocation={myPos} /> : <ArtFeed markers={markers} />}
