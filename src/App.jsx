@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
 import ArtMap from './ArtMap';
 import ArtFeed from './ArtFeed';
+import './App.css';
 
 export default function App() {
   const [view, setView] = useState('feed');
@@ -91,14 +92,17 @@ const handlePostArt = () => {
   return (
     <div style={{ height: "97vh", width: "97vw", display: "flex", flexDirection: "column",fontFamily: 'Helvetica, sans-serif' }}>
       <div style={headerStyle}>
-        🏺ART Was Here🏛️
+        🏺 ART Was Here 🏛️
       </div>
       {/* 🖼️ Dynamic Content View */}
       <main style={{ flex: 1,
                     overflowY: "auto",
                     position: "relative",
                     marginTop: 'calc(7vh + env(safe-area-inset-top))', // Pushes content down so header doesn't cover it
-                    marginBottom: '80px',}}>
+                    marginBottom: '80px',
+                    overflow: "hidden",
+                    borderRadius: '12px'
+                    }}>
         {view === 'map' ? <ArtMap markers={markers} userLocation={myPos} /> : <ArtFeed markers={markers} />}
       </main>
 
@@ -106,7 +110,7 @@ const handlePostArt = () => {
       <div style={navStyle}>
 
         <button onClick={() => setView('feed')} style={view === 'feed' ? activeTab : tab}>
-          📱 Feed
+          🏠
         </button>
         {/* 📸 The Central "Post" Button */}
         <button 
@@ -114,15 +118,15 @@ const handlePostArt = () => {
           disabled={loading}
           style={{
             
-            zIndex: 1000, padding: "15px 20px", backgroundColor: "#ff4444", color: "white",
-            border: "none", borderRadius: "50px", fontWeight: "bold", fontSize: "16px",
+            zIndex: 1000, padding: "15px 20px", backgroundColor: "#8ccccc", color: "black",
+            border: "none", borderRadius: "50px", fontWeight: "bold", fontSize: "30px",
             boxShadow: "0 4px 15px rgba(0,0,0,0.3)", cursor: "pointer"
           }}
         >
           {loading ? "POSTING..." : "📸"}
         </button>
         <button onClick={() => setView('map')} style={view === 'map' ? activeTab : tab}>
-          📍 Map
+          📍
         </button>
         
       </div>
@@ -140,12 +144,14 @@ const navStyle = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-around',
-  backgroundColor: '#ffffff',
-  borderTop: '1px solid #eee',
+  backgroundColor: '#02735E',
+
   zIndex: 2000,
   // 📱 This is the magic line for Safari
   paddingBottom: 'calc(env(safe-area-inset-bottom) + 10px)', 
-  paddingTop: '10px'
+  paddingTop: '10px',
+  margin: '10px',
+  borderRadius: '12px',
 
 };
 const headerStyle = {
@@ -160,11 +166,14 @@ const headerStyle = {
   fontSize: '24px',
   fontWeight: 'bold',
   color: 'black',
-  backgroundColor: 'white', // Ensure it has a background or it will be transparent
+  color: 'white',
   boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
   zIndex: 3000, // Higher than the map and nav
   paddingTop: 'env(safe-area-inset-top)', // Support for iPhone "Dynamic Island" / Notch
+  borderRadius: '12px 12px 12px 12px',
+  backgroundColor: '#02735E',
+  margin: '10px'
 };
-const tab = { flex: 1, border: 'none', background: 'none', color: '#888', fontSize: '16px' };
-const activeTab = { ...tab, color: '#000', fontWeight: 'bold' };
+const tab = { flex: 1, border: 'none', background: 'none', color: '#b9b9b9', fontSize: '30px' };
+const activeTab = { ...tab, color: '#ffffff', fontWeight: 'bold' };
 

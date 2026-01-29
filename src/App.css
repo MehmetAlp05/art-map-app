@@ -4,6 +4,7 @@ html, body, #root {
   overflow: hidden; 
   position: fixed;
   width: 100%;
+  background-color: #022326;
 }
 
 main {

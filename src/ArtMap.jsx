@@ -51,14 +51,12 @@ export default function ArtMap({ markers, userLocation }) {
   }, []);
 
   return (
-    <div style={{ height: "85vh", position: "relative" }}>
+    <div style={{ height: "100vh", width: "95vw", position: "relative" }}>
       {/* 🟢 The "Post ART" Button */}
-
-
       <MapContainer 
         center={userLocation || [0, 0]} 
         zoom={userLocation ? 15 : 2} 
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "100%", width: "95%", margin: "10px", borderRadius: '12px' }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         

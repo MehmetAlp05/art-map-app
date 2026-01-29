@@ -1,7 +1,7 @@
 // ArtFeed.jsx
 export default function ArtFeed({ markers }) {
   return (
-    <div style={{ padding: '10px', paddingBottom: '80px', backgroundColor: '#fff' }}>
+    <div style={{ padding: '10px', paddingBottom: '80px' }}>
       {markers.map((post) => (
         <div key={post.id} style={cardStyle}>
           <img src={post.image_url} alt="ART" style={imgStyle} />
